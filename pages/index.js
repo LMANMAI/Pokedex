@@ -122,17 +122,17 @@ const PokemonType = styled.div`
     text-transform: capitalize;
   }
 `;
-const listPage = ({ pokemons }) => {
-    const [ offset, setOffset ] = useState(1);
-    const [ nextPage, setnextPage ] = useState();
-    const [ prevPage, setPrevPage ] = useState();
-    const paginador = 30;
+const HomePage = ({ pokemons }) => {
+    // const [ offset, setOffset ] = useState(1);
+    // const [ nextPage, setnextPage ] = useState();
+    // const [ prevPage, setPrevPage ] = useState();
+    // const paginador = 30;
   
-    useEffect(() => {
-      setnextPage(paginador * offset);
-      setPrevPage(nextPage - paginador); 
+    // useEffect(() => {
+    //   setnextPage(paginador * offset);
+    //   setPrevPage(nextPage - paginador); 
   
-    }, [offset]);
+    // }, [offset]);
     const getTypeColor = (type) => {
         switch (type) {
           case "fire":
@@ -213,7 +213,7 @@ const listPage = ({ pokemons }) => {
         ))
       )}
     </PokedexContainer>
-    <ButtonContainer>
+    {/* <ButtonContainer>
         {offset === 1 ? null : (
           <Link href={{ pathname: "/", query: { query: prevPage } }}>
             <button onClick={() => setPrevPage(offset - 1)}>
@@ -226,19 +226,17 @@ const listPage = ({ pokemons }) => {
             <IoIosArrowForward />
           </button>
         </Link>
-      </ButtonContainer>
+      </ButtonContainer> */}
     </Container>
   );
 };
-export async function getServerSideProps({query}) {
-  let offset;
-  if(query.query === undefined || isNaN(query.query)) {
-    offset = 0;
-  }else{
-    offset = query.query;
-  }
+export async function getServerSideProps(context) {
+  // let offset;
+  // if(query.query === undefined || isNaN(query.query)) {
+  //   offset = 0;
+  // }else
   const pokemonList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?offset=0&limit=30`
+    `https://pokeapi.co/api/v2/pokemon?offset=0&limit=50`
   );
   const pokemonJSON = await pokemonList.json();
   const pokemonData = await Promise.all(
@@ -248,11 +246,11 @@ export async function getServerSideProps({query}) {
           return await dataJSON;
       })
   )
-  console.log(pokemonData);
+  //console.log(pokemonData);
   return {
     props: {
       pokemons: pokemonData,
     }, // will be passed to the page component as props
   };
 }
-export default listPage;
+export default HomePage;
