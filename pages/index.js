@@ -231,8 +231,14 @@ const listPage = ({ pokemons }) => {
   );
 };
 export async function getServerSideProps({query}) {
+  let offset;
+  if(query.query === undefined || isNaN(query.query)) {
+    offset = 0;
+  }else{
+    offset = query.query;
+  }
   const pokemonList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?offset=${query.query}&limit=30`
+    `https://pokeapi.co/api/v2/pokemon?offset=0&limit=30`
   );
   const pokemonJSON = await pokemonList.json();
   const pokemonData = await Promise.all(
