@@ -122,17 +122,17 @@ const PokemonType = styled.div`
     text-transform: capitalize;
   }
 `;
-const HomePage = ({ pokemons }) => {
-    // const [ offset, setOffset ] = useState(1);
-    // const [ nextPage, setnextPage ] = useState();
-    // const [ prevPage, setPrevPage ] = useState();
-    // const paginador = 30;
+const ListPage = ({ pokemons }) => {
+    const [ offset, setOffset ] = useState(1);
+    const [ nextPage, setnextPage ] = useState();
+    const [ prevPage, setPrevPage ] = useState();
+    const paginador = 30;
   
-    // useEffect(() => {
-    //   setnextPage(paginador * offset);
-    //   setPrevPage(nextPage - paginador); 
+    useEffect(() => {
+      setnextPage(paginador * offset);
+      setPrevPage(nextPage - paginador); 
   
-    // }, [offset]);
+    }, [offset]);
     const getTypeColor = (type) => {
         switch (type) {
           case "fire":
@@ -175,68 +175,75 @@ const HomePage = ({ pokemons }) => {
       };
       const router = useRouter();
   return (
-    <Container>     
-      <PokedexContainer>
+    <div>
       {React.Children.toArray(
-        pokemons.map((pokemon) => (
-          <Link href={`/pokemon/${pokemon.id}`}>
-            <PokemonItem
-              onClick={() => {
-                console.log(pokemon.id);
-                router.push(`/pokemon/${pokemon.id}`);
-              }}
-              background={() => getTypeColor(pokemon.types[0].type.name)}
-            >
-              <img
-                className="pkball"
-                src="/images/pokeball-bg.png"
-                alt="pokeball"
-              />
-              <PokemonImage
-                src={pokemon.sprites.other["official-artwork"].front_default}
-              />
-              <PokemonNumber># {pokemon.id}</PokemonNumber>
-              <div>
-                <PokemonName>{pokemon.name}</PokemonName>
-                <PokemonTypes>
-                  {React.Children.toArray(
-                    pokemon.types.map((type) => (
-                      <PokemonType>
-                        <p>{type.type.name}</p>
-                      </PokemonType>
-                    ))
-                  )}
-                </PokemonTypes>
-              </div>
-            </PokemonItem>
-          </Link>
+        pokemons.map((pokemon)=>(
+          <li>{pokemon.name}</li>
         ))
       )}
-    </PokedexContainer>
-    {/* <ButtonContainer>
-        {offset === 1 ? null : (
-          <Link href={{ pathname: "/", query: { query: prevPage } }}>
-            <button onClick={() => setPrevPage(offset - 1)}>
-              <IoIosArrowBack />
-            </button>
-          </Link>
-        )}
-        <Link href={{ pathname: "/", query: { query: nextPage } }}>
-          <button onClick={() => setOffset(offset + 1)}>
-            <IoIosArrowForward />
-          </button>
-        </Link>
-      </ButtonContainer> */}
-    </Container>
+    </div>
+    // <Container>     
+    //   <PokedexContainer>
+    //   {React.Children.toArray(
+    //     pokemons.map((pokemon) => (
+    //       <Link href={`/pokemon/${pokemon.id}`}>
+    //         <PokemonItem
+    //           onClick={() => {
+    //             console.log(pokemon.id);
+    //             router.push(`/pokemon/${pokemon.id}`);
+    //           }}
+    //           background={() => getTypeColor(pokemon.types[0].type.name)}
+    //         >
+    //           <img
+    //             className="pkball"
+    //             src="/images/pokeball-bg.png"
+    //             alt="pokeball"
+    //           />
+    //           <PokemonImage
+    //             src={pokemon.sprites.other["official-artwork"].front_default}
+    //           />
+    //           <PokemonNumber># {pokemon.id}</PokemonNumber>
+    //           <div>
+    //             <PokemonName>{pokemon.name}</PokemonName>
+    //             <PokemonTypes>
+    //               {React.Children.toArray(
+    //                 pokemon.types.map((type) => (
+    //                   <PokemonType>
+    //                     <p>{type.type.name}</p>
+    //                   </PokemonType>
+    //                 ))
+    //               )}
+    //             </PokemonTypes>
+    //           </div>
+    //         </PokemonItem>
+    //       </Link>
+    //     ))
+    //   )}
+    // </PokedexContainer>
+    // <ButtonContainer>
+    //     {offset === 1 ? null : (
+    //       <Link href={{ pathname: "/", query: { query: prevPage } }}>
+    //         <button onClick={() => setPrevPage(offset - 1)}>
+    //           <IoIosArrowBack />
+    //         </button>
+    //       </Link>
+    //     )}
+    //     <Link href={{ pathname: "/", query: { query: nextPage } }}>
+    //       <button onClick={() => setOffset(offset + 1)}>
+    //         <IoIosArrowForward />
+    //       </button>
+    //     </Link>
+    //   </ButtonContainer>
+    // </Container>
   );
 };
-export async function getServerSideProps(context) {
+export async function getServerSideProps({query}) {
   // let offset;
   // if(query.query === undefined || isNaN(query.query)) {
   //   offset = 0;
   // }else
   const pokemonList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?offset=0&limit=50`
+    `https://pokeapi.co/api/v2/pokemon?offset=${query.query}&limit=30`
   );
   const pokemonJSON = await pokemonList.json();
   const pokemonData = await Promise.all(
@@ -246,11 +253,11 @@ export async function getServerSideProps(context) {
           return await dataJSON;
       })
   )
-  //console.log(pokemonData);
+  console.log(pokemonData);
   return {
     props: {
       pokemons: pokemonData,
     }, // will be passed to the page component as props
   };
 }
-export default HomePage;
+export default ListPage;
