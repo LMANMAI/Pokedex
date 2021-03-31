@@ -1,8 +1,12 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
+const Container = styled.div`
+    border: 1px solid red;
+`;
 const listPage = ({pokemons}) => {
     return (
-        <div>
+        <Container>
             <ul>
                 {React.Children.toArray(
                     pokemons.map((pokemon)=>
@@ -10,7 +14,7 @@ const listPage = ({pokemons}) => {
                     )
                 )}
             </ul>
-        </div>
+        </Container>
     )
 }
 export async function getServerSideProps(context) {
