@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 const PokedexContainer = styled.div`
   width: 90vw;
   margin: 10px auto;
-
   font-family: "Montserrat", sans-serif;
   @media (min-width: 768px) {
     & {
@@ -143,7 +142,7 @@ const index = ({ pokemons }) => {
     }
   };
   const router = useRouter();
-  
+
   return (
     <PokedexContainer>
       {React.Children.toArray(

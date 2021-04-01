@@ -2,6 +2,7 @@ import React from "react";
 import styled from '@emotion/styled';
 import { useRouter } from "next/router";
 import Head from 'next/head';
+import { IoMdArrowRoundBack } from 'react-icons/io';
 
 const Container = styled.div`
   height: 80vh;
@@ -9,6 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+ 
   /* position: absolute; */
   ::before {
     content: "";
@@ -173,6 +175,11 @@ const PokemonPage = (props) => {
       background={() => getTypeColor(props.pokemon.types[0].type.name)}
     >
       <HeadName>
+          <IoMdArrowRoundBack 
+            onClick={()=>(
+                router.back()
+            )}
+          />
        <PokemonName>
           <PokemonID>#0{props.pokemon.id}</PokemonID>
           {props.pokemon.name}
