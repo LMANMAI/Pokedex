@@ -1,6 +1,7 @@
 import React from "react";
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const Container = styled.div`
   width: 100vw;
@@ -39,11 +40,20 @@ const PokedexTittle = styled.h1`
   justify-content: center;
   cursor: pointer;
 `;
-const Head = () => {
+const Header = () => {
   const router = useRouter();
   console.log(router.pathname);
   return (
     <Container>
+      <Head>
+        <title>Pokedex Nextjs</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <PokedexTittle
         onClick={() => {
           router.push("/");
@@ -55,16 +65,13 @@ const Head = () => {
             onClick={() => {
               router.back();
             }}
-          >
-          
-          </button>
+          ></button>
         )}
         <Pokeball src="/images/pokebola.png" alt="Logo" />
         Pokedex NextJs
       </PokedexTittle>
-     
     </Container>
   );
 };
 
-export default Head;
+export default Header;

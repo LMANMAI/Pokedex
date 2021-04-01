@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Head from "next/head";
+import { useRouter } from 'next/router'
 
 const PokedexContainer = styled.div`
   width: 90vw;
   margin: 10px auto;
-  font-family: 'Montserrat', sans-serif;
+
+  font-family: "Montserrat", sans-serif;
   @media (min-width: 768px) {
     & {
       display: grid;
@@ -41,14 +42,14 @@ const PokemonItem = styled.div`
     & {
       height: 150px;
     }
-    .pkball {
+    /* .pkball {
       position: absolute;
       z-index: 0;
       width: 70%;
       opacity: 0.3;
       top: -10px;
       left: -70px;
-    }
+    } */
   }
 `;
 const PokemonImg = styled.img`
@@ -141,41 +142,38 @@ const index = ({ pokemons }) => {
         return "#f09ce6";
     }
   };
+  const router = useRouter();
+  
   return (
-    <div>
-      <Head>
-        <title>Pokedex Nextjs</title>
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head> 
-      <PokedexContainer>
-        {React.Children.toArray(
-          pokemons.map((pokemon) => (
-            <PokemonItem
-              background={() => getTypeColor(pokemon.types[0].type.name)}
-            >
-              <PokemonImg
-                src={pokemon.sprites.other["official-artwork"].front_default}
-              />
-              <PokemonNumber># {pokemon.id}</PokemonNumber>
-              <div>
-                <PokemonName>{pokemon.name}</PokemonName>
-                <TypeContainer>
-                  {React.Children.toArray(
-                    pokemon.types.map((type) => (
-                      <PokemonType>
-                        <p>{type.type.name}</p>
-                      </PokemonType>
-                    ))
-                  )}
-                </TypeContainer>
-              </div>
-            </PokemonItem>
-          ))
-        )}
-      </PokedexContainer>
-    </div>
+    <PokedexContainer>
+      {React.Children.toArray(
+        pokemons.map((pokemon) => (
+          <PokemonItem
+            onClick={()=>(
+              router.push(`/pokemon/${pokemon.id}`)
+            )}
+            background={() => getTypeColor(pokemon.types[0].type.name)}
+          >
+            <PokemonImg
+              src={pokemon.sprites.other["official-artwork"].front_default}
+            />
+            <PokemonNumber># {pokemon.id}</PokemonNumber>
+            <div>
+              <PokemonName>{pokemon.name}</PokemonName>
+              <TypeContainer>
+                {React.Children.toArray(
+                  pokemon.types.map((type) => (
+                    <PokemonType>
+                      <p>{type.type.name}</p>
+                    </PokemonType>
+                  ))
+                )}
+              </TypeContainer>
+            </div>
+          </PokemonItem>
+        ))
+      )}
+    </PokedexContainer>
   );
 };
 export async function getServerSideProps(context) {
