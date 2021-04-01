@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "@emotion/styled";
-
+import Head from "next/head";
 
 const PokedexContainer = styled.div`
- width: 90vw;
+  width: 90vw;
   margin: 10px auto;
+  font-family: 'Montserrat', sans-serif;
   @media (min-width: 768px) {
     & {
       display: grid;
@@ -14,7 +15,7 @@ const PokedexContainer = styled.div`
   }
 `;
 const PokemonItem = styled.div`
-cursor: pointer;
+  cursor: pointer;
   display: flex;
   border-radius: 15px;
   margin-top: 1rem;
@@ -33,7 +34,7 @@ cursor: pointer;
     top: -45px;
     left: -110px;
   }*/
-  :hover { 
+  :hover {
     transform: scale(1.03);
   }
   @media (min-width: 768px) {
@@ -51,7 +52,7 @@ cursor: pointer;
   }
 `;
 const PokemonImg = styled.img`
-z-index: 1;
+  z-index: 1;
   width: fit-content;
   max-width: 90px;
   padding: 5px;
@@ -63,16 +64,17 @@ z-index: 1;
   }
 `;
 const PokemonNumber = styled.div`
-position: absolute;
+  position: absolute;
   right: 25px;
   bottom: 10px;
   color: white;
   font-style: italic;
   font-size: 3rem;
+  font-weight: 700;
   opacity: 0.5;
 `;
 const PokemonName = styled.h4`
- z-index: 2;
+  z-index: 2;
   color: white;
   font-size: 2rem;
   text-transform: capitalize;
@@ -82,9 +84,10 @@ const PokemonName = styled.h4`
       font-size: 1.2rem;
       justify-self: start;
     }
-  }`;
+  }
+`;
 const PokemonType = styled.div`
- margin: 3px;
+  margin: 3px;
   padding: 5px;
   border-radius: 35px;
   background-color: #fff;
@@ -94,10 +97,8 @@ const PokemonType = styled.div`
   }
 `;
 const TypeContainer = styled.div`
- display: flex;
+  display: flex;
 `;
-
-
 
 const index = ({ pokemons }) => {
   const getTypeColor = (type) => {
@@ -141,13 +142,20 @@ const index = ({ pokemons }) => {
     }
   };
   return (
-    <PokedexContainer>
+    <div>
+      <Head>
+        <title>Pokedex Nextjs</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head> 
+      <PokedexContainer>
         {React.Children.toArray(
           pokemons.map((pokemon) => (
-          <PokemonItem
-            background={() => getTypeColor(pokemon.types[0].type.name)}
-          >
-            <PokemonImg
+            <PokemonItem
+              background={() => getTypeColor(pokemon.types[0].type.name)}
+            >
+              <PokemonImg
                 src={pokemon.sprites.other["official-artwork"].front_default}
               />
               <PokemonNumber># {pokemon.id}</PokemonNumber>
@@ -163,10 +171,11 @@ const index = ({ pokemons }) => {
                   )}
                 </TypeContainer>
               </div>
-
-          </PokemonItem>))
+            </PokemonItem>
+          ))
         )}
-     </PokedexContainer>
+      </PokedexContainer>
+    </div>
   );
 };
 export async function getServerSideProps(context) {
