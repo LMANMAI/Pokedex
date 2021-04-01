@@ -103,19 +103,16 @@ const TypeContainer = styled.div`
 
 const index = ({ pokemons }) => {
   //states del paginador
-  const [page, setPage] = useState(1);
-  const [nextpage, setNextPage] = useState(0);
-  const [prevpage, setPrevPage] = useState(20);
-  //states del query
-  const [query, setQuery] = useState(0);
-  let offset = 20;
+  const [ offset, setOffset ] = useState(1);
+  const [ nextPage, setnextPage ] = useState(0);
+  const [ prevPage, setPrevPage ] = useState(0);
+  const paginador = 20;
 
   useEffect(() => {
-    setNextPage(page * offset);
-    setPrevPage(nextpage - offset );
-    console.log("offset siguiente", nextpage);
-    console.log("pffset anterior", prevpage);
-  }, [nextpage, prevpage, page]);
+    setnextPage(paginador * offset);
+    setPrevPage(nextPage - paginador); 
+
+  }, [offset]);
 
   const router = useRouter();
   return (
@@ -148,16 +145,17 @@ const index = ({ pokemons }) => {
       <div className="button_container">
         <button
           onClick={() => {
-            router.push({ pathname: "/", query: { page: prevpage } });
-            setPage(page - 1);
+            setPrevPage(offset - 1)
+            router.push({ pathname: "/", query: { page: prevPage } });            
           }}
         >
           Anterior
         </button>
+
         <button
           onClick={() => {
-            setPage(page + 1);
-            router.push({ pathname: "/", query: { page: nextpage } });
+            setOffset(offset + 1)
+            router.push({ pathname: "/", query: { page: nextPage } });
           }}
         >
           Siguiente
