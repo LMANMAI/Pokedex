@@ -6,8 +6,7 @@ const Container = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
-  justify-content: center;
- 
+  justify-content: center; 
   p{
       font-size: 13px;
       color: #212121;

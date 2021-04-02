@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { getTypeColor } from "../helper";
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const PokedexContainer = styled.div`
   width: 90vw;
   margin: 10px auto;
-  font-family: "Montserrat", sans-serif;
+ 
   @media (min-width: 768px) {
     & {
       display: grid;
@@ -94,6 +95,7 @@ const PokemonType = styled.div`
   background-color: ${(props)=> props.background};
   //opacity: 0.5;
   border: 1px solid #f4f4f4;
+  color: white;
   p {
     text-transform: capitalize;
   }
@@ -101,23 +103,46 @@ const PokemonType = styled.div`
 const TypeContainer = styled.div`
   display: flex;
 `;
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+  //border: 1px solid red;
+`;
+const Button = styled.button`
+  border: none;
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background-color: #e9463f;
+  color: white;
+  outline: none;
+  cursor: pointer;
+:first-child{
+  margin-right: 1rem;
+}
+`;
 
 const index = ({ pokemons }) => {
   //states del paginador
-  const [ offset, setOffset ] = useState(1);
+  const [ paginador, setPaginador ] = useState(1);
   const [ nextPage, setnextPage ] = useState(0);
-  const [ prevPage, setPrevPage ] = useState(0);
-  const paginador = 20;
+  const [ prevPage, setPrevPage ] = useState(20);
+  const offset = 20;
 
   useEffect(() => {
-    setnextPage(paginador * offset);
-    setPrevPage(nextPage - paginador); 
+    //if(prevPage === 0) return;
+    setnextPage(Math.max(offset * paginador));
+    setPrevPage(Math.min(nextPage - offset)); 
     console.log(offset)
     console.log()
-  }, [offset]);
+  }, [paginador]);
 
   const router = useRouter();
   return (
+    <div>
     <PokedexContainer>
       {React.Children.toArray(
         pokemons.map((pokemon) => (
@@ -143,27 +168,30 @@ const index = ({ pokemons }) => {
             </div>
           </PokemonItem>
         ))
-      )}
-      <div className="button_container">
-        <button
-          onClick={() => {
-            setPrevPage(offset - 1)
-            router.push({ pathname: "/", query: { page: prevPage } });            
-          }}
-        >
-          Anterior
-        </button>
-
-        <button
-          onClick={() => {
-            setOffset(offset + 1)
-            router.push({ pathname: "/", query: { page: nextPage } });
-          }}
-        >
-          Siguiente
-        </button>
-      </div>
+      )}      
     </PokedexContainer>
+    <ButtonContainer>
+    {paginador === 1 ?null :(
+       <Button
+       onClick={() => {
+         setPaginador(paginador - 1)
+         router.push({ pathname: "/", query: { page: prevPage } });            
+       }}
+     >
+      <FaArrowLeft />
+     </Button>
+    )}
+
+     <Button
+       onClick={() => {
+         setPaginador(paginador + 1)
+         router.push({ pathname: "/", query: { page: nextPage } });
+       }}
+     >
+       <FaArrowRight />
+     </Button>
+   </ButtonContainer>
+   </div>
   );
 };
 export async function getServerSideProps({ query }) {

@@ -1,36 +1,28 @@
 import React from "react";
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import Head from 'next/head';
-import { IoMdArrowRoundBack } from 'react-icons/io';
-import { getTypeColor } from '../../helper';
+import Head from "next/head";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { getTypeColor } from "../../helper";
 
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
   overflow-x: hidden;
-  background-color:${(props) => props.background};
+  background-color: ${(props) => props.background};
   display: grid;
   grid-template-rows: 1fr 1fr;
-  @media (min-width: 768px) {       
+  @media (min-width: 768px) {
     height: 95vh;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: initial;
   }
 `;
 const PokemonSingleImage = styled.img`
-  width: 65%;
-  position: absolute;
-  top: 90px;
-  @media(min-width: 480px){
-    width: 45%;
-  }
-  @media (min-width: 768px) {
-    width: 40%;
-    top: 90px;
-    left: 70px;
-  }
-`;
+  width: 90%;
+  display: block;
+  margin: auto;
+ `;
 const HeadName = styled.div`
   position: absolute;
   top: 20px;
@@ -70,21 +62,33 @@ const TypeName = styled.div`
   margin: 10px 5px;
   color: white;
 `;
-const TopSide = styled.div``;
-const BottomSideContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  box-shadow: 0 3px 6px rgba(154, 160, 185, 0.5),
-    0 15px 40px rgba(166, 173, 201, 0.23);
-  padding: 25px;
+const TopSide = styled.div`
+  display: flex;
+`;
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 80%;
+  /* justify-content: center; */
+  /* justify-self: center; */
+  align-self: flex-end;
+  margin: 0 auto;
+  //border: 1px solid red;
+  @media(min-width: 768px){
+    width: 80%;
+    align-self: center;
+    padding: .5rem;
+  }
+`;
+const BottomSideContainer = styled.div``;
+const Box = styled.div`
+  background-color: white;
+  margin-top: 1rem;
   border-radius: 35px;
-  @media (min-width: 768px) {
-    & {
-      top: 40%;
-      right: 10%;
-      padding: 30px;
-      width: 300px;
-    }
+  @media(min-width: 768px){
+    width: 80%;
+    align-self: center;
+    padding: 1rem;
+  
   }
 `;
 const StatContainer = styled.div`
@@ -112,62 +116,64 @@ const StatValue = styled(StatBase)`
   }
 `;
 const PokemonPage = (props) => {
-
   const router = useRouter();
   return (
     <div>
-     <Head>
+      <Head>
         <title>{props.pokemon.name}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-    <Container
-      background={() => getTypeColor(props.pokemon.types[0].type.name)}
-    >
-      <TopSide>
-        <HeadName>
-          <IoMdArrowRoundBack 
-            onClick={()=>(
-                router.back()
-            )}
-          />
-       <PokemonName>
-          <PokemonID>#0{props.pokemon.id}</PokemonID>
-          {props.pokemon.name}
-        </PokemonName>
-      </HeadName>
-      <PokemonSingleImage
-        src={props.pokemon.sprites.other["official-artwork"].front_default}
-        alt={props.pokemon.name}
-      />
-      </TopSide>
-      
-      <BottomSideContainer>
-        <TypesContainer>
-          {React.Children.toArray(
-            props.pokemon.types.map((type) => (
-              //{console.log(type.type.name)}
-              <TypeName background={getTypeColor(type.type.name)}>
-                {type.type.name}
-              </TypeName>
-            ))
-          )}
-        </TypesContainer>
+      <Container
+        background={() => getTypeColor(props.pokemon.types[0].type.name)}
+      >
+        <TopSide>
+          <HeadName>
+            <IoMdArrowRoundBack onClick={() => router.back()} />
+            <PokemonName>
+              <PokemonID>#0{props.pokemon.id}</PokemonID>
+              {props.pokemon.name}
+            </PokemonName>
+          </HeadName>
+          <ImageContainer>
+            <PokemonSingleImage
+              src={
+                props.pokemon.sprites.other["official-artwork"].front_default
+              }
+              alt={props.pokemon.name}
+            />
+          </ImageContainer>
+        </TopSide>
 
-        {React.Children.toArray(
-          props.pokemon.stats.map((stat) => (
-            //{ console.log(stat.stat.name)}
-            <StatContainer>
-              <StatName>{stat.stat.name}</StatName>
-              <StatBase>
-                <StatValue width={`${stat.base_stat}px`}>
-                  <p>{stat.base_stat}</p>
-                </StatValue>
-              </StatBase>
-            </StatContainer>
-          ))
-        )}
-      </BottomSideContainer>
-    </Container>
+        <BottomSideContainer>
+          <Box>
+            <TypesContainer>
+              {React.Children.toArray(
+                props.pokemon.types.map((type) => (
+                  //{console.log(type.type.name)}
+                  <TypeName background={getTypeColor(type.type.name)}>
+                    {type.type.name}
+                  </TypeName>
+                ))
+              )}
+            </TypesContainer>
+
+            {React.Children.toArray(
+              props.pokemon.stats.map((stat) => (
+                //{ console.log(stat.stat.name)}
+
+                <StatContainer>
+                  <StatName>{stat.stat.name}</StatName>
+                  <StatBase>
+                    <StatValue width={`${stat.base_stat}px`}>
+                      <p>{stat.base_stat}</p>
+                    </StatValue>
+                  </StatBase>
+                </StatContainer>
+              ))
+            )}
+          </Box>
+        </BottomSideContainer>
+      </Container>
     </div>
   );
 };

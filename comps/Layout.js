@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 const Wrapper = styled.div`
     width: 100vw;
     height: 100vh;
-   
+   overflow-x: hidden;
 `;
 const Layout = (props) => {
     return (
