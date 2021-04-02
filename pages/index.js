@@ -124,8 +124,17 @@ const Button = styled.button`
   margin-right: 1rem;
 }
 `;
+const RegionContainer = styled.div`
+margin: 0 auto;
+padding: 8px;
+border: 1px solid red;
+  width: 90vw;
+  display: flex;
+  flex-direction: row;
+`;
+const Region = styled.div``;
 
-const index = ({ pokemons }) => {
+const index = ({ pokemons, regiones }) => {
   //states del paginador
   const [ paginador, setPaginador ] = useState(1);
   const [ nextPage, setnextPage ] = useState(0);
@@ -141,8 +150,16 @@ const index = ({ pokemons }) => {
   }, [paginador]);
 
   const router = useRouter();
+  console.log(regiones)
   return (
     <div>
+      <RegionContainer>
+        {React.Children.toArray(
+          regiones.map((region)=>(
+            <Region>{region.name}</Region>
+          ))
+        )}
+      </RegionContainer>
     <PokedexContainer>
       {React.Children.toArray(
         pokemons.map((pokemon) => (
@@ -195,8 +212,9 @@ const index = ({ pokemons }) => {
   );
 };
 export async function getServerSideProps({ query }) {
-  console.log(query.page);
-
+  //console.log(query.page);
+  const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
+  const pokemonRegionJson = await pokemonRegion.json();
   const pokemonsList = await fetch(
     `https://pokeapi.co/api/v2/pokemon/?offset=${query.page}`
   );
@@ -212,6 +230,7 @@ export async function getServerSideProps({ query }) {
   return {
     props: {
       pokemons: pokemonsData,
+      regiones: pokemonRegionJson.results
     }, // will be passed to the page component as props
   };
 }
