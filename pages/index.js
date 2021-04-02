@@ -55,7 +55,7 @@ const PokemonItem = styled.div`
 const PokemonImg = styled.img`
   z-index: 1;
   width: fit-content;
-  max-width: 90px;
+  max-width: 75px;
   padding: 5px;
   @media (min-width: 768px) {
     & {
@@ -91,8 +91,9 @@ const PokemonType = styled.div`
   margin: 3px;
   padding: 5px;
   border-radius: 35px;
-  background-color: #fff;
-  opacity: 0.5;
+  background-color: ${(props)=> props.background};
+  //opacity: 0.5;
+  border: 1px solid #f4f4f4;
   p {
     text-transform: capitalize;
   }
@@ -111,7 +112,8 @@ const index = ({ pokemons }) => {
   useEffect(() => {
     setnextPage(paginador * offset);
     setPrevPage(nextPage - paginador); 
-
+    console.log(offset)
+    console.log()
   }, [offset]);
 
   const router = useRouter();
@@ -132,7 +134,7 @@ const index = ({ pokemons }) => {
               <TypeContainer>
                 {React.Children.toArray(
                   pokemon.types.map((type) => (
-                    <PokemonType>
+                    <PokemonType background={() => getTypeColor(type.type.name)}>
                       <p>{type.type.name}</p>
                     </PokemonType>
                   ))

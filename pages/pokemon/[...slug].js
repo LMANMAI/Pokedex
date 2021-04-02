@@ -6,29 +6,16 @@ import { IoMdArrowRoundBack } from 'react-icons/io';
 import { getTypeColor } from '../../helper';
 
 const Container = styled.div`
-  height: 80vh;
+  height: 100vh;
   width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
- 
-  /* position: absolute; */
-  ::before {
-    content: "";
-    width: 1000px;
-    height: 1000px;
-    border-radius: 50%;
-    background-color: ${(props) => props.background};
-    position: relative;
-    transform: translateY(-74%);
-    z-index: 0;
-  }
-  @media (min-width: 768px) {
-    ::before {
-      width: 2000px;
-      height: 2000px;   
-    }
-    // background-color:${(props) => props.background} ;
+  overflow-x: hidden;
+  background-color:${(props) => props.background};
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  @media (min-width: 768px) {       
+    height: 95vh;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: initial;
   }
 `;
 const PokemonSingleImage = styled.img`
@@ -83,6 +70,7 @@ const TypeName = styled.div`
   margin: 10px 5px;
   color: white;
 `;
+const TopSide = styled.div``;
 const BottomSideContainer = styled.div`
   position: absolute;
   top: 50%;
@@ -135,7 +123,8 @@ const PokemonPage = (props) => {
     <Container
       background={() => getTypeColor(props.pokemon.types[0].type.name)}
     >
-      <HeadName>
+      <TopSide>
+        <HeadName>
           <IoMdArrowRoundBack 
             onClick={()=>(
                 router.back()
@@ -150,6 +139,8 @@ const PokemonPage = (props) => {
         src={props.pokemon.sprites.other["official-artwork"].front_default}
         alt={props.pokemon.name}
       />
+      </TopSide>
+      
       <BottomSideContainer>
         <TypesContainer>
           {React.Children.toArray(

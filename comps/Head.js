@@ -43,6 +43,7 @@ const PokedexTittle = styled.h1`
 const Header = () => {
   const router = useRouter();
   console.log(router.pathname);
+  if(router.pathname !== "/") return null;
   return (
     <Container>
       <Head>
