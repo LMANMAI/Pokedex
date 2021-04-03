@@ -56,9 +56,6 @@ const index = ({ pokemons, regiones }) => {
   const [nextPage, setnextPage] = useState(0);
   const [prevPage, setPrevPage] = useState(20);
   const offset = 20;
-  //states del offset y el limit de la busqueda por generacion
-  const [generacion, setGeneracion] = useState({});
-
   useEffect(() => {
     //if(prevPage === 0) return;
     setnextPage(Math.max(offset * paginador));

@@ -61,6 +61,7 @@ const TypeName = styled.div`
   border-radius: 35px;
   margin: 10px 5px;
   color: white;
+  text-transform: capitalize;
 `;
 const TopSide = styled.div`
   display: flex;
@@ -79,15 +80,23 @@ const ImageContainer = styled.div`
     padding: .5rem;
   }
 `;
-const BottomSideContainer = styled.div``;
+const BottomSideContainer = styled.div`
+justify-content: center;
+    display: flex;
+    align-items: center;
+`;
 const Box = styled.div`
   background-color: white;
   margin-top: 1rem;
   border-radius: 35px;
+  width: 80%;
+    height: 60%;
   @media(min-width: 768px){
-    width: 80%;
+    width: 60%;
     align-self: center;
     padding: 1rem;
+    //width: fit-content;
+    height: fit-content;
   
   }
 `;
@@ -98,6 +107,7 @@ const StatContainer = styled.div`
 `;
 const StatName = styled.div`
   margin: 0 5px;
+  text-transform: capitalize;
 `;
 const StatBase = styled.div`
   width: 100px;
@@ -160,7 +170,6 @@ const PokemonPage = (props) => {
             {React.Children.toArray(
               props.pokemon.stats.map((stat) => (
                 //{ console.log(stat.stat.name)}
-
                 <StatContainer>
                   <StatName>{stat.stat.name}</StatName>
                   <StatBase>
