@@ -256,7 +256,7 @@ export async function getServerSideProps({ query }) {
   const data = pokeGen(query.region);
   console.log('objeto que devulve el swiych', data)
   //if(typeof data === 'undefined') 
-  if (typeof query.region === "undefined") {
+  if (typeof query.region !== "undefined") {
     // console.log("no hay devolucion del switch");
     consulta = {
       limit: data.limit,

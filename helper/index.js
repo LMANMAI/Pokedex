@@ -84,7 +84,7 @@ export  const pokeGen = (name) => {
     default:
       return {
         limit: 20,
-        offset: 20,
+        offset: 0,
       };
   }
 };
