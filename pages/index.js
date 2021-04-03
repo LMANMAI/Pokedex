@@ -243,20 +243,17 @@ const index = ({ pokemons, regiones }) => {
   );
 };
 export async function getServerSideProps({ query }) {
-  const data = pokeGen(query.region);
+  const data = await pokeGen(query.region);
   console.log("objeto que devulve el switch", data);
-  const  consulta = {
-    limit: data.limit,
-    offset: data.offset,
-  };
-  console.log(consulta);
+  const { limit, offset } = data;
+
   //consulta para las regiones
   const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
   const pokemonRegionJson = await pokemonRegion.json();
 
   //consulta para los pokemons
   let pokemonsList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/?offset=${consulta.offset}&limit=${consulta.limit}`
+    `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
     // `https://pokeapi.co/api/v2/pokemon/?offset=${query.page}`
   );
   const pokemonsJSON = await pokemonsList.json();
