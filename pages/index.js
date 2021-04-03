@@ -183,7 +183,7 @@ const index = ({ pokemons, regiones }) => {
                 console.log(pokeGen(region.name));
                 router.push({
                   pathname: "/",
-                  query: { region: JSON.stringify(pokeGen(region.name))},
+                  query: { region: region.name },
                 });
               }}
             >
@@ -249,29 +249,31 @@ const index = ({ pokemons, regiones }) => {
 export async function getServerSideProps({ query }) {
   //console.log(query.page);
   console.log(query.region)
+  const data = pokeGen(query.region)
   let consulta = {
     limit: 20,
     offset: 0,
   };
+  console.log(data)
   if (typeof query.region === "undefined") {
-    console.log("no hay devolucion del switch");
+  // console.log("no hay devolucion del switch");
+ 
   } else {
-    const data = await JSON.parse(query.region);
+   // const data = await JSON.parse(query.region);
     consulta = {
       limit: data.limit,
       offset: data.offset,
     };
     console.log(consulta.limit)
   }
-
   //consulta para las regiones
   const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
   const pokemonRegionJson = await pokemonRegion.json();
 
   //consulta para los pokemons
   let pokemonsList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/?offset=${consulta.offset}&limit=${consulta.limit}`
-    // `https://pokeapi.co/api/v2/pokemon/?offset=${query.page}`
+   `https://pokeapi.co/api/v2/pokemon/?offset=${consulta.offset}&limit=${consulta.limit}`
+     // `https://pokeapi.co/api/v2/pokemon/?offset=${query.page}`
   );
   let pokemonsJSON = await pokemonsList.json();
   let pokemonsData = await Promise.all(
