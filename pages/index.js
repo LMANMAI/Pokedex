@@ -156,10 +156,7 @@ const index = ({ pokemons, regiones }) => {
   const [prevPage, setPrevPage] = useState(20);
   const offset = 20;
   //states del offset y el limit de la busqueda por generacion
-  const [generacion, setGeneracion] = useState({
-    offset: 0,
-    limit: 0,
-  });
+  const [generacion, setGeneracion] = useState({});
 
   useEffect(() => {
     //if(prevPage === 0) return;
@@ -170,7 +167,11 @@ const index = ({ pokemons, regiones }) => {
   }, [paginador]);
 
   const router = useRouter();
-
+ const handleClickGen = (region) =>{
+  setGeneracion(
+    pokeGen(region)
+  )
+ }
   return (
     <div>
       <RegionContainer>
@@ -178,9 +179,11 @@ const index = ({ pokemons, regiones }) => {
           regiones.map((region) => (
             <Region
               onClick={() => {
+                handleClickGen(region.name);
+                console.log(pokeGen(region.name));
                 router.push({
                   pathname: "/",
-                  query: { region: JSON.stringify(pokeGen(region.name)) },
+                  query: { region: JSON.stringify(pokeGen(region.name))},
                 });
               }}
             >
@@ -245,7 +248,7 @@ const index = ({ pokemons, regiones }) => {
 };
 export async function getServerSideProps({ query }) {
   //console.log(query.page);
-  //console.log(query.region)
+  console.log(query.region)
   let consulta = {
     limit: 20,
     offset: 0,
