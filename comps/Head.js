@@ -42,8 +42,8 @@ const PokedexTittle = styled.h1`
 `;
 const Header = () => {
   const router = useRouter();
-  //console.log(router.pathname);
-  if(router.pathname !== "/") return null;
+  console.log(router.pathname);
+  if(router.pathname === "/region/[...slug]" || router.pathname === "/pokemon/[...slug]") return null;
   return (
     <Container>
       <Head>
