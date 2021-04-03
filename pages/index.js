@@ -245,25 +245,18 @@ const index = ({ pokemons, regiones }) => {
   );
 };
 export async function getServerSideProps({ query }) {
-  //console.log(query.page);
-  //console.log(query.region);
-  
+ 
   let consulta = {
     limit: 20,
     offset: 0,
   };
-   
   const data = pokeGen(query.region);
-  console.log('objeto que devulve el swiych', data)
-  //if(typeof data === 'undefined') 
-  if (typeof query.region !== "undefined") {
-    // console.log("no hay devolucion del switch");
+  console.log("objeto que devulve el switch", data);
     consulta = {
-      limit: data.limit,
-      offset: data.offset,
-    };
-    console.log(consulta);
-  }
+    limit: data.limit,
+    offset: data.offset,
+  };
+  console.log(consulta);
   //consulta para las regiones
   const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
   const pokemonRegionJson = await pokemonRegion.json();
