@@ -39,7 +39,55 @@ export const getTypeColor = (type) => {
     }
   }; 
 
-
+export  const pokeGen = (name) => {
+  switch (name) {
+    case "kanto":
+      return {
+        limit: 151,
+        offset: 0,
+      };
+    case "johto":
+      return {
+        limit: 100,
+        offset: 151,
+      };
+    case "hoenn":
+      return {
+        limit: 135,
+        offset: 251,
+      };
+    case "sinnoh":
+      return {
+        limit: 107,
+        offset: 386,
+      };
+    case "unova":
+      return {
+        limit: 156,
+        offset: 493,
+      };
+    case "kalos":
+      return {
+        limit: 72,
+        offset: 649,
+      };
+    case "alola":
+      return {
+        limit: 88,
+        offset: 721,
+      };
+    case "galar":
+      return {
+        limit: 81,
+        offset: 809,
+      };
+    default:
+      return {
+        limit: 20,
+        offset: 20,
+      };
+  }
+};
 
 
 
