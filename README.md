@@ -1,4 +1,4 @@
-First Proyect using NextJs 
+Primer proyecto usando NextJs 
 
 Pokedex
 Desktop views
