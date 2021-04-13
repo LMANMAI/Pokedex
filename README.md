@@ -1,17 +1,12 @@
-Primer proyecto usando NextJs 
+#Pokedex-NextJs
 
-Pokedex
-Desktop views
+`Mobile:`
+![image](https://user-images.githubusercontent.com/64815326/114619540-114e7200-9c81-11eb-8661-79b47b6569a2.png)
 
-Index:
-![image](https://user-images.githubusercontent.com/64815326/113488047-0c740c00-9492-11eb-85a0-88ee5dff6242.png)
+`Desktop:`
+![image](https://user-images.githubusercontent.com/64815326/114620166-afdad300-9c81-11eb-835f-39909c86031a.png)
 
-Single Pokemon: 
-![image](https://user-images.githubusercontent.com/64815326/113488082-4218f500-9492-11eb-9b10-8495072f5f0b.png)
-
-Pokemon per Region:
-![image](https://user-images.githubusercontent.com/64815326/113488107-64ab0e00-9492-11eb-988a-5b4753919a14.png)
+![image](https://user-images.githubusercontent.com/64815326/114620032-8b7ef680-9c81-11eb-82ff-4e00f940f929.png)
+![image](https://user-images.githubusercontent.com/64815326/114620253-c84aed80-9c81-11eb-8e89-7656ea5112ef.png)
 
 
-`Mobile`:
-{"A?":"A","a":5,"d":"B","h":"www.canva.com","c":"DAEblGo_QKs","i":"ABAgRBTbsxODOVPMSIUR8A","b":1618346253306,"A":{"C":"#ffffff"},"B":1350,"C":650}
