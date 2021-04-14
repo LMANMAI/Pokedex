@@ -4,6 +4,7 @@ import List from '../../comps/List';
 import { useRouter } from 'next/router';
 import { FaArrowLeft } from "react-icons/fa";
 import styled from '@emotion/styled';
+import Head from 'next/head';
 
 const Button = styled.button`
   border: none ;
@@ -22,10 +23,14 @@ const Button = styled.button`
     z-index: 1;
   }
 `;
-const Region = ({pokemons}) => {
+const Region = ({ pokemons, region_name }) => {
   const router = useRouter();
+  console.log(region_name)
   return (
   <div>
+    <Head>
+    <title>{region_name}</title>
+    </Head>
       <Button onClick={()=> (router.back())}><FaArrowLeft /></Button>
      <List pokemons={pokemons}/>
   </div>
@@ -39,9 +44,8 @@ export async function getServerSideProps({ query }) {
     const _slugs = query.slug;
     slugs = _slugs.join("_");
   }
-
-  const data = await pokeGen(slugs);
-  console.log("objeto que devulve el switch", data);
+  let regionname = slugs;
+  const data = await pokeGen(slugs); 
   const { limit, offset } = data;
 
   const pokemonList = await fetch(
@@ -50,15 +54,16 @@ export async function getServerSideProps({ query }) {
   const pokemonsJSON = await pokemonList.json(); 
   const pokemonsData = await Promise.all(
     pokemonsJSON.results.map(async ({ url }) => {
-      //let urlBarra = url.substring(0, url.length - 1);
-      const data = await fetch(url);
+      let urlBarra = url.substring(0, url.length - 1);
+      const data = await fetch(urlBarra);
       const dataJSON = await data.json();
       return dataJSON;
     })
   );
   return {
     props: {
-        pokemons: pokemonsData
+        pokemons: pokemonsData,
+        region_name : regionname
     }, // will be passed to the page component as props
   };
 }
