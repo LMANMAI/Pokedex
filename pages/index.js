@@ -2,8 +2,15 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import List from '../comps/List';
-
+import List from "../comps/List";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectPaginador,
+  setnextPage,
+  setPrevPage,
+  selectNextPage,
+  selectPrevPage,
+} from "../features/pagSlice";
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -50,20 +57,22 @@ const Region = styled.button`
   text-transform: capitalize;
 `;
 
-const index = ({ pokemons, regiones }) => {
-  //states del paginador
-  const [paginador, setPaginador] = useState(1);
-  const [nextPage, setnextPage] = useState(0);
-  const [prevPage, setPrevPage] = useState(20);
-  const offset = 20;
-  useEffect(() => {
-    //if(prevPage === 0) return;
-    setnextPage(Math.max(offset * paginador));
-    setPrevPage(Math.min(nextPage - offset));
-    // console.log(offset);
-    // console.log();
-  }, [paginador]);
+const index = ({ pokemons, regiones, objetoCompleto }) => {
+  const page = useSelector(selectPaginador);
+  const cadenaNext = useSelector(selectNextPage);
+  const cadenaPrev = useSelector(selectPrevPage);
+  const dispatch = useDispatch();
 
+  //destructuro el objeto que me llega como props
+  const { next, previous } = objetoCompleto;
+  let offset = next.indexOf("=");
+  let limit = next.indexOf("&limit");
+  useEffect(() => {
+    dispatch(setnextPage(next.substring(offset, limit)));
+    if (previous !== null) {
+      dispatch(setPrevPage(previous.substring(offset, limit)));
+    }
+  }, [objetoCompleto]);
   const router = useRouter();
 
   return (
@@ -84,14 +93,16 @@ const index = ({ pokemons, regiones }) => {
           ))
         )}
       </RegionContainer>
-              {/*aca va la lista */}
-      <List pokemons={pokemons} />
+
       <ButtonContainer>
-        {paginador === 1 ? null : (
+        {page === 1 ? null : (
           <Button
             onClick={() => {
-              setPaginador(paginador - 1);
-              router.push({ pathname: "/", query: { page: prevPage } });
+              dispatch(setPrevPage(previous));
+              router.push({
+                pathname: "/",
+                query: { offset: cadenaPrev, paginador: page },
+              });
             }}
           >
             <FaArrowLeft />
@@ -100,25 +111,29 @@ const index = ({ pokemons, regiones }) => {
 
         <Button
           onClick={() => {
-            setPaginador(paginador + 1);
-            router.push({ pathname: "/", query: { page: nextPage } });
+            dispatch(setnextPage(next));
+            router.push({
+              pathname: "/",
+              query: { offset: cadenaNext, paginador: page },
+            });
           }}
         >
           <FaArrowRight />
         </Button>
       </ButtonContainer>
+      {/*aca va la lista */}
+      <List pokemons={pokemons} />
     </div>
   );
 };
 export async function getServerSideProps({ query }) {
- 
   //consulta para las regiones
   const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
   const pokemonRegionJson = await pokemonRegion.json();
 
   //consulta para los pokemons
   let pokemonsList = await fetch(
-   `https://pokeapi.co/api/v2/pokemon/?offset=${query.page}`
+    `https://pokeapi.co/api/v2/pokemon/?offset${query.offset}&limit=20`
   );
   const pokemonsJSON = await pokemonsList.json();
   const pokemonsData = await Promise.all(
@@ -134,6 +149,7 @@ export async function getServerSideProps({ query }) {
     props: {
       pokemons: pokemonsData,
       regiones: pokemonRegionJson.results,
+      objetoCompleto: pokemonsJSON,
     }, // will be passed to the page component as props
   };
 }

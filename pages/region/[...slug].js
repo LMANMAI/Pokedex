@@ -1,40 +1,36 @@
 import React from "react";
 import { pokeGen } from "../../helper";
-import List from '../../comps/List';
-import { useRouter } from 'next/router';
+import List from "../../comps/List";
+import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
-import styled from '@emotion/styled';
-import Head from 'next/head';
+import styled from "@emotion/styled";
+import Head from "next/head";
 
 const Button = styled.button`
-  border: none ;
+  border: none;
   outline: none;
-  
+
   border-radius: 50%;
   width: 55px;
   height: 55px;
   background-color: #5595a5;
   color: white;
- margin-left: 1.5rem;
+  margin-left: 1.5rem;
   cursor: pointer;
-  @media( min-width: 768px){
-    margin: 1rem .3rem;
-    position: fixed;
-    z-index: 1;
-  }
 `;
 const Region = ({ pokemons, region_name }) => {
   const router = useRouter();
-  console.log(region_name)
   return (
-  <div>
-    <Head>
-    <title>{region_name}</title>
-    </Head>
-      <Button onClick={()=> (router.back())}><FaArrowLeft /></Button>
-     <List pokemons={pokemons}/>
-  </div>
- );
+    <div>
+      <Head>
+        <title>{region_name}</title>
+      </Head>
+      <Button onClick={() => router.back()}>
+        <FaArrowLeft />
+      </Button>
+      <List pokemons={pokemons} />
+    </div>
+  );
 };
 export async function getServerSideProps({ query }) {
   let slugs;
@@ -45,13 +41,13 @@ export async function getServerSideProps({ query }) {
     slugs = _slugs.join("_");
   }
   let regionname = slugs;
-  const data = await pokeGen(slugs); 
+  const data = await pokeGen(slugs);
   const { limit, offset } = data;
 
   const pokemonList = await fetch(
     `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
   );
-  const pokemonsJSON = await pokemonList.json(); 
+  const pokemonsJSON = await pokemonList.json();
   const pokemonsData = await Promise.all(
     pokemonsJSON.results.map(async ({ url }) => {
       let urlBarra = url.substring(0, url.length - 1);
@@ -62,8 +58,8 @@ export async function getServerSideProps({ query }) {
   );
   return {
     props: {
-        pokemons: pokemonsData,
-        region_name : regionname
+      pokemons: pokemonsData,
+      region_name: regionname,
     }, // will be passed to the page component as props
   };
 }
