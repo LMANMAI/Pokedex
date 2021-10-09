@@ -22,7 +22,7 @@ const PokemonSingleImage = styled.img`
   width: 90%;
   display: block;
   margin: auto;
- `;
+`;
 const HeadName = styled.div`
   position: absolute;
   top: 20px;
@@ -74,30 +74,29 @@ const ImageContainer = styled.div`
   align-self: flex-end;
   margin: 0 auto;
   //border: 1px solid red;
-  @media(min-width: 768px){
+  @media (min-width: 768px) {
     width: 80%;
     align-self: center;
-    padding: .5rem;
+    padding: 0.5rem;
   }
 `;
 const BottomSideContainer = styled.div`
-justify-content: center;
-    display: flex;
-    align-items: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 `;
 const Box = styled.div`
   background-color: white;
   margin-top: 1rem;
   border-radius: 35px;
   width: 80%;
-    height: 60%;
-  @media(min-width: 768px){
+  height: 60%;
+  @media (min-width: 768px) {
     width: 60%;
     align-self: center;
     padding: 1rem;
     //width: fit-content;
     height: fit-content;
-  
   }
 `;
 const StatContainer = styled.div`
@@ -159,7 +158,6 @@ const PokemonPage = (props) => {
             <TypesContainer>
               {React.Children.toArray(
                 props.pokemon.types.map((type) => (
-                  //{console.log(type.type.name)}
                   <TypeName background={getTypeColor(type.type.name)}>
                     {type.type.name}
                   </TypeName>
@@ -169,7 +167,6 @@ const PokemonPage = (props) => {
 
             {React.Children.toArray(
               props.pokemon.stats.map((stat) => (
-                //{ console.log(stat.stat.name)}
                 <StatContainer>
                   <StatName>{stat.stat.name}</StatName>
                   <StatBase>
@@ -194,8 +191,6 @@ export async function getServerSideProps({ query }) {
     const _slugs = query.slug;
     slugs = _slugs.join("_");
   }
-
-  console.log("El slug que llega por el query es", slugs);
 
   const pokemonData = await fetch(`https://pokeapi.co/api/v2/pokemon/${slugs}`);
   const pokemonDataJson = await pokemonData.json();

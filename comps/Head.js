@@ -42,8 +42,11 @@ const PokedexTittle = styled.h1`
 `;
 const Header = () => {
   const router = useRouter();
-  console.log(router.pathname);
-  if(router.pathname === "/region/[...slug]" || router.pathname === "/pokemon/[...slug]") return null;
+  if (
+    router.pathname === "/region/[...slug]" ||
+    router.pathname === "/pokemon/[...slug]"
+  )
+    return null;
   return (
     <Container>
       <Head>
@@ -53,7 +56,12 @@ const Header = () => {
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
-        <link rel="shortcut icon" href="/images/pokebola.png" type="image/x-icon"/>nk
+        <link
+          rel="shortcut icon"
+          href="/images/pokebola.png"
+          type="image/x-icon"
+        />
+        nk
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <PokedexTittle
