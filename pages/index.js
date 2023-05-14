@@ -85,7 +85,6 @@ export async function getServerSideProps({ query }) {
 
   const pokemonsData = await Promise.all(
     pokemonsJSON.results.map(async ({ url }) => {
-      //let urlBarra = url.substring(0, url.length - 1);
       const data = await fetch(url);
       const dataJSON = await data.json();
       return dataJSON;
