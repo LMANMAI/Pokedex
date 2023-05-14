@@ -14,11 +14,11 @@
     "@emotion/styled": "^11.1.5",
     "@reduxjs/toolkit": "^1.6.2",
     "babel-plugin-emotion": "^11.0.0",
-    "next": "10.1.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "next": "^13.4.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.2.0",
-    "react-redux": "^7.2.5"
+    "react-redux": "^8.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14"
