@@ -6,6 +6,7 @@ export const pagSlice = createSlice({
     nextUrl: "",
     prevUrl: "",
     regiones: [],
+    search: "",
   },
   reducers: {
     setnextPage: (state, action) => {
@@ -19,14 +20,19 @@ export const pagSlice = createSlice({
     setRegiones: (state, action) => {
       state.regiones = action.payload;
     },
+    setSearch: (state, action) => {
+      state.search = action.payload;
+    },
   },
 });
 
-export const { setnextPage, setPrevPage, setRegiones } = pagSlice.actions;
+export const { setnextPage, setPrevPage, setRegiones, setSearch } =
+  pagSlice.actions;
 
 export const selectPaginador = (state) => state.pag.paginador;
 export const selectNextPage = (state) => state.pag.nextUrl;
 export const selectPrevPage = (state) => state.pag.prevUrl;
 export const selectRegiones = (state) => state.pag.regiones;
+export const selectSearch = (state) => state.pag.search;
 
 export default pagSlice.reducer;

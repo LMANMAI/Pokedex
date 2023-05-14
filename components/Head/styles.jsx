@@ -52,10 +52,36 @@ export const PokedexTittle = styled.h1`
   display: flex;
   justify-content: center;
   cursor: pointer;
+  width: 350px;
+  align-items: center;
 `;
 
 export const Pokeball = styled.img`
   width: 35px;
   height: 35px;
   margin-right: 5px;
+`;
+
+export const SearchContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 15%;
+  width: 100%;
+  border: 1px solid red;
+  border-radius: 15px;
+  margin-left: 10px;
+  align-items: center;
+  svg {
+    margin: 5px;
+  }
+`;
+export const InputSearch = styled.input`
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  &:focus {
+    .search_container {
+      border: 1px solid blue;
+    }
+  }
 `;
