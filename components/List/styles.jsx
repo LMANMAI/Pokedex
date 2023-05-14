@@ -1,12 +1,9 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import { getTypeColor } from "../helper";
-import { useRouter } from "next/router";
+import styled from "@emotion/styled";
 
-const PokedexContainer = styled.div`
+export const PokedexContainer = styled.div`
   width: 90vw;
   margin: 10px auto;
-
+  padding-top: 35px;
   @media (min-width: 768px) {
     & {
       display: grid;
@@ -15,7 +12,7 @@ const PokedexContainer = styled.div`
     }
   }
 `;
-const PokemonItem = styled.div`
+export const PokemonItem = styled.div`
   cursor: pointer;
   display: flex;
   border-radius: 15px;
@@ -52,7 +49,7 @@ const PokemonItem = styled.div`
     } */
   }
 `;
-const PokemonImg = styled.img`
+export const PokemonImg = styled.img`
   z-index: 1;
   width: fit-content;
   max-width: 75px;
@@ -64,7 +61,7 @@ const PokemonImg = styled.img`
     }
   }
 `;
-const PokemonNumber = styled.div`
+export const PokemonNumber = styled.div`
   position: absolute;
   right: 25px;
   bottom: 10px;
@@ -74,7 +71,7 @@ const PokemonNumber = styled.div`
   font-weight: 700;
   opacity: 0.5;
 `;
-const PokemonName = styled.h4`
+export const PokemonName = styled.h4`
   z-index: 2;
   color: white;
   font-size: 2rem;
@@ -87,7 +84,7 @@ const PokemonName = styled.h4`
     }
   }
 `;
-const PokemonType = styled.div`
+export const PokemonType = styled.div`
   margin: 3px;
   padding: 5px;
   border-radius: 35px;
@@ -99,43 +96,6 @@ const PokemonType = styled.div`
     text-transform: capitalize;
   }
 `;
-const TypeContainer = styled.div`
+export const TypeContainer = styled.div`
   display: flex;
 `;
-const List = ({pokemons}) => {
-    
-  const router = useRouter();
-    return (        
-      <PokedexContainer>
-      {React.Children.toArray(
-        pokemons.map((pokemon) => (
-          <PokemonItem
-            onClick={() => router.push(`/pokemon/${pokemon.id}`)}
-            background={() => getTypeColor(pokemon.types[0].type.name)}
-          >
-            <PokemonImg
-              src={pokemon.sprites.other["official-artwork"].front_default}
-            />
-            <PokemonNumber># {pokemon.id}</PokemonNumber>
-            <div>
-              <PokemonName>{pokemon.name}</PokemonName>
-              <TypeContainer>
-                {React.Children.toArray(
-                  pokemon.types.map((type) => (
-                    <PokemonType
-                      background={() => getTypeColor(type.type.name)}
-                    >
-                      <p>{type.type.name}</p>
-                    </PokemonType>
-                  ))
-                )}
-              </TypeContainer>
-            </div>
-          </PokemonItem>
-        ))
-      )}
-    </PokedexContainer>
-    )
-}
-
-export default List

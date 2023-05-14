@@ -1,23 +1,11 @@
 import React from "react";
 import { pokeGen } from "../../helper";
-import List from "../../comps/List";
+import { List } from "../../components";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
-import styled from "@emotion/styled";
+import { ButtonRegion } from "../../styles";
 import Head from "next/head";
 
-const Button = styled.button`
-  border: none;
-  outline: none;
-
-  border-radius: 50%;
-  width: 55px;
-  height: 55px;
-  background-color: #5595a5;
-  color: white;
-  margin-left: 1.5rem;
-  cursor: pointer;
-`;
 const Region = ({ pokemons, region_name }) => {
   const router = useRouter();
   return (
@@ -25,9 +13,9 @@ const Region = ({ pokemons, region_name }) => {
       <Head>
         <title>{region_name}</title>
       </Head>
-      <Button onClick={() => router.back()}>
+      <ButtonRegion onClick={() => router.back()}>
         <FaArrowLeft />
-      </Button>
+      </ButtonRegion>
       <List pokemons={pokemons} />
     </div>
   );
