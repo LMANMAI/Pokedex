@@ -10,17 +10,14 @@ import {
   selectNextPage,
   selectPrevPage,
   setRegiones,
-  selectSearch,
 } from "../features/pagSlice";
 
 const index = ({ pokemons, regiones, objetoCompleto }) => {
   const page = useSelector(selectPaginador);
   const cadenaNext = useSelector(selectNextPage);
   const cadenaPrev = useSelector(selectPrevPage);
-  const search = useSelector(selectSearch);
   const dispatch = useDispatch();
 
-  console.log(search);
   //destructuro el objeto que me llega como props
   const { next, previous } = objetoCompleto;
   let offset = next.indexOf("=");
