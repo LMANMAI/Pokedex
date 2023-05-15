@@ -13,32 +13,32 @@ import {
 } from "../features/pagSlice";
 
 const index = ({ pokemons, regiones, objetoCompleto }) => {
-  // const page = useSelector(selectPaginador);
-  // const cadenaNext = useSelector(selectNextPage);
-  // const cadenaPrev = useSelector(selectPrevPage);
-  // const dispatch = useDispatch();
+  const page = useSelector(selectPaginador);
+  const cadenaNext = useSelector(selectNextPage);
+  const cadenaPrev = useSelector(selectPrevPage);
+  const dispatch = useDispatch();
 
-  // //destructuro el objeto que me llega como props
-  // const { next, previous } = objetoCompleto;
-  // let offset = next.indexOf("=");
-  // let limit = next.indexOf("&limit");
-  // const router = useRouter();
+  //destructuro el objeto que me llega como props
+  const { next, previous } = objetoCompleto;
+  let offset = next.indexOf("=");
+  let limit = next.indexOf("&limit");
+  const router = useRouter();
 
-  // useEffect(() => {
-  //   dispatch(setnextPage(next.substring(offset, limit)));
-  //   if (previous !== null) {
-  //     dispatch(setPrevPage(previous.substring(offset, limit)));
-  //   }
-  // }, [objetoCompleto]);
+  useEffect(() => {
+    dispatch(setnextPage(next.substring(offset, limit)));
+    if (previous !== null) {
+      dispatch(setPrevPage(previous.substring(offset, limit)));
+    }
+  }, [objetoCompleto]);
 
-  // useEffect(() => {
-  //   dispatch(setRegiones(regiones));
-  // }, []);
+  useEffect(() => {
+    dispatch(setRegiones(regiones));
+  }, []);
 
   return (
     <div>
       {/*aca va la lista */}
-      {/* <List pokemons={pokemons} />
+      <List pokemons={pokemons} />
       <ButtonContainer>
         {page === 1 ? null : (
           <Button
@@ -65,7 +65,7 @@ const index = ({ pokemons, regiones, objetoCompleto }) => {
         >
           <FaArrowRight />
         </Button>
-      </ButtonContainer> */}
+      </ButtonContainer>
     </div>
   );
 };
