@@ -77,7 +77,7 @@ export async function getServerSideProps({ query }) {
 
     //consulta para los pokemons
     let pokemonsList = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset${query.offset}&limit=30`
+      `https://pokeapi.co/api/v2/pokemon/?offset${query.offset}&limit=20`
     );
     const pokemonsJSON = await pokemonsList.json();
 
