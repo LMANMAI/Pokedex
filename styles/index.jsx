@@ -156,4 +156,19 @@ export const ButtonRegion = styled.button`
   margin-left: 1.5rem;
   cursor: pointer;
 `;
+
+export const ContainerLoadMore = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  .button_loadMore {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    background-color: #e04551;
+    cursor: pointer;
+  }
+`;
+
 export { FaArrowLeft, FaArrowRight, IoMdArrowRoundBack };

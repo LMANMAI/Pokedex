@@ -1,38 +1,39 @@
 import React from "react";
+import Head from "next/head";
 import { useState } from "react";
 import { pokeGen } from "../../helper";
 import { List } from "../../components";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
-import { ButtonRegion } from "../../styles";
-import Head from "next/head";
+import { ButtonRegion, ContainerLoadMore } from "../../styles";
 
-const Region = ({ initialPokemons, region_name }) => {
+const Region = ({ initialPokemons, region_name, limitgen, offset }) => {
   const router = useRouter();
   const [pokemons, setPokemons] = useState(initialPokemons);
-  const [count, setCount] = useState(0);
+  const [limit, setLimit] = useState(20);
 
-  // const loadMorePokemons = async () => {
-  //   const { limit, offset } = pokeGen([]);
+  const loadMorePokemons = async (currentPokemons) => {
+    const pokemonList = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
+    );
 
-  //   console.log(count);
-  //   const pokemonList = await fetch(
-  //     `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${count}`
-  //   );
+    const pokemonsJSON = await pokemonList.json();
 
-  //   const pokemonsJSON = await pokemonList.json();
+    const newPokemonsData = await Promise.all(
+      pokemonsJSON.results.map(async ({ url }) => {
+        let urlBarra = url.substring(0, url.length - 1);
+        const data = await fetch(urlBarra);
+        const dataJSON = await data.json();
+        return dataJSON;
+      })
+    );
 
-  //   const newPokemonsData = await Promise.all(
-  //     pokemonsJSON.results.map(async ({ url }) => {
-  //       let urlBarra = url.substring(0, url.length - 1);
-  //       const data = await fetch(urlBarra);
-  //       const dataJSON = await data.json();
-  //       return dataJSON;
-  //     })
-  //   );
+    const filteredPokemons = newPokemonsData.filter(
+      (pokemon) => !currentPokemons.some((p) => p.id === pokemon.id)
+    );
 
-  //   setPokemons((prevPokemons) => [...prevPokemons, ...newPokemonsData]);
-  // };
+    setPokemons((prevPokemons) => [...prevPokemons, ...filteredPokemons]);
+  };
 
   return (
     <div>
@@ -43,64 +44,54 @@ const Region = ({ initialPokemons, region_name }) => {
         <FaArrowLeft />
       </ButtonRegion>
       <List pokemons={pokemons} />
-      <button
-        onClick={() => {
-          setCount(count + 20);
-          loadMorePokemons();
-        }}
-      >
-        Load More
-      </button>
+      <ContainerLoadMore>
+        <button
+          className="button_loadMore"
+          onClick={() => {
+            setLimit(offset + 20);
+            loadMorePokemons(pokemons);
+          }}
+        >
+          Load More
+        </button>
+      </ContainerLoadMore>
     </div>
   );
 };
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-}
-export async function getStaticProps({ query }) {
-  try {
-    let slugs;
-    if (query == {} || !query?.slug) {
-      slugs = "";
-    } else {
-      const _slugs = query.slug;
-      slugs = _slugs.join("_");
-    }
-    let regionname = slugs;
-    const initialData = pokeGen(slugs);
-    const { limit, offset } = initialData;
 
-    const pokemonList = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
-    );
-
-    const pokemonsJSON = await pokemonList.json();
-    const initialPokemonsData = await Promise.all(
-      pokemonsJSON.results.map(async ({ url }) => {
-        let urlBarra = url.substring(0, url.length - 1);
-        const data = await fetch(urlBarra);
-        const dataJSON = await data.json();
-        return dataJSON;
-      })
-    );
-
-    return {
-      props: {
-        initialPokemons: initialPokemonsData,
-        region_name: regionname,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        initialPokemons: [],
-        region_name: "",
-      },
-    };
+export async function getServerSideProps({ query }) {
+  let slugs;
+  if (query == {} || !query?.slug) {
+    slugs = "";
+  } else {
+    const _slugs = query.slug;
+    slugs = _slugs.join("_");
   }
+  let regionname = slugs;
+  const data = await pokeGen(slugs);
+  const { limit, offset, limitgen } = data;
+
+  const pokemonList = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
+  );
+  const pokemonsJSON = await pokemonList.json();
+  const pokemonsData = await Promise.all(
+    pokemonsJSON.results.map(async ({ url }) => {
+      let urlBarra = url.substring(0, url.length - 1);
+      const data = await fetch(urlBarra);
+      const dataJSON = await data.json();
+      return dataJSON;
+    })
+  );
+  return {
+    props: {
+      initialPokemons: pokemonsData,
+      region_name: regionname,
+      limitgen: limitgen,
+      limitn: limit,
+      offset: offset,
+    },
+  };
 }
 
 export default Region;
