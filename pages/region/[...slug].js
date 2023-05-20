@@ -7,18 +7,16 @@ import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
 import { ButtonRegion, ContainerLoadMore } from "../../styles";
 
-const Region = ({ initialPokemons, region_name, limitgen, offset }) => {
+const Region = ({ initialPokemons, region_name, offset }) => {
   const router = useRouter();
   const [pokemons, setPokemons] = useState(initialPokemons);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(offset + 20);
 
   const loadMorePokemons = async (currentPokemons) => {
     const pokemonList = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
+      `https://pokeapi.co/api/v2/pokemon/?offset=${limit}&limit=20`
     );
-
     const pokemonsJSON = await pokemonList.json();
-
     const newPokemonsData = await Promise.all(
       pokemonsJSON.results.map(async ({ url }) => {
         let urlBarra = url.substring(0, url.length - 1);
@@ -31,7 +29,7 @@ const Region = ({ initialPokemons, region_name, limitgen, offset }) => {
     const filteredPokemons = newPokemonsData.filter(
       (pokemon) => !currentPokemons.some((p) => p.id === pokemon.id)
     );
-
+    setLimit((prevLimit) => prevLimit + 20);
     setPokemons((prevPokemons) => [...prevPokemons, ...filteredPokemons]);
   };
 
@@ -48,7 +46,6 @@ const Region = ({ initialPokemons, region_name, limitgen, offset }) => {
         <button
           className="button_loadMore"
           onClick={() => {
-            setLimit(offset + 20);
             loadMorePokemons(pokemons);
           }}
         >

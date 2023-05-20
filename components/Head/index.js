@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
@@ -14,8 +14,6 @@ import {
 import {
   selectRegiones,
   setSearch,
-  setOffset,
-  selectOffset,
   setOffsetLimit,
 } from "../../features/pagSlice";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -27,7 +25,6 @@ const Header = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const regiones = useSelector(selectRegiones);
-  const offset = useSelector(selectOffset);
 
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
@@ -74,7 +71,6 @@ const Header = () => {
 
     router.push({
       pathname: `/region/${region.name}`,
-      query: { offset: 3, limit: 0 }, // Cambia el valor de offset según tus necesidades
     });
   };
 
