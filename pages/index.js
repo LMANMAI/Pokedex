@@ -10,17 +10,14 @@ import {
   selectNextPage,
   selectPrevPage,
   setRegiones,
-  selectSearch,
 } from "../features/pagSlice";
 
 const index = ({ pokemons, regiones, objetoCompleto }) => {
   const page = useSelector(selectPaginador);
   const cadenaNext = useSelector(selectNextPage);
   const cadenaPrev = useSelector(selectPrevPage);
-  const search = useSelector(selectSearch);
   const dispatch = useDispatch();
 
-  console.log(search);
   //destructuro el objeto que me llega como props
   const { next, previous } = objetoCompleto;
   let offset = next.indexOf("=");
@@ -74,29 +71,38 @@ const index = ({ pokemons, regiones, objetoCompleto }) => {
 };
 export async function getServerSideProps({ query }) {
   //consulta para las regiones
-  const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
-  const pokemonRegionJson = await pokemonRegion.json();
+  try {
+    const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
+    const pokemonRegionJson = await pokemonRegion.json();
 
-  //consulta para los pokemons
-  let pokemonsList = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/?offset${query.offset}&limit=30`
-  );
-  const pokemonsJSON = await pokemonsList.json();
+    //consulta para los pokemons
+    let pokemonsList = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/?offset${query.offset}&limit=20`
+    );
+    const pokemonsJSON = await pokemonsList.json();
 
-  const pokemonsData = await Promise.all(
-    pokemonsJSON.results.map(async ({ url }) => {
-      const data = await fetch(url);
-      const dataJSON = await data.json();
-      return dataJSON;
-    })
-  );
-
-  return {
-    props: {
-      pokemons: pokemonsData,
-      regiones: pokemonRegionJson.results,
-      objetoCompleto: pokemonsJSON,
-    },
-  };
+    const pokemonsData = await Promise.all(
+      pokemonsJSON.results.map(async ({ url }) => {
+        const data = await fetch(url);
+        const dataJSON = await data.json();
+        return dataJSON;
+      })
+    );
+    return {
+      props: {
+        pokemons: pokemonsData,
+        regiones: pokemonRegionJson.results,
+        objetoCompleto: pokemonsJSON,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        pokemons: [],
+        regiones: [],
+        objetoCompleto: [],
+      },
+    };
+  }
 }
 export default index;

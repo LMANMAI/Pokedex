@@ -1,13 +1,39 @@
 import React from "react";
+import Head from "next/head";
+import { useState } from "react";
 import { pokeGen } from "../../helper";
-import { List } from "../../components";
+import { List, Loader } from "../../components";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
-import { ButtonRegion } from "../../styles";
-import Head from "next/head";
+import { ButtonRegion, ContainerLoadMore } from "../../styles";
 
-const Region = ({ pokemons, region_name }) => {
+const Region = ({ initialPokemons, region_name, offset }) => {
   const router = useRouter();
+  const [pokemons, setPokemons] = useState(initialPokemons);
+  const [limit, setLimit] = useState(offset + 20);
+  const [load, setLoad] = useState(false);
+
+  const loadMorePokemons = async (currentPokemons) => {
+    const pokemonList = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/?offset=${limit}&limit=20`
+    );
+    const pokemonsJSON = await pokemonList.json();
+    const newPokemonsData = await Promise.all(
+      pokemonsJSON.results.map(async ({ url }) => {
+        let urlBarra = url.substring(0, url.length - 1);
+        const data = await fetch(urlBarra);
+        const dataJSON = await data.json();
+        return dataJSON;
+      })
+    );
+    setLoad(false);
+    const filteredPokemons = newPokemonsData.filter(
+      (pokemon) => !currentPokemons.some((p) => p.id === pokemon.id)
+    );
+    setLimit((prevLimit) => prevLimit + 20);
+    setPokemons((prevPokemons) => [...prevPokemons, ...filteredPokemons]);
+  };
+
   return (
     <div>
       <Head>
@@ -17,9 +43,25 @@ const Region = ({ pokemons, region_name }) => {
         <FaArrowLeft />
       </ButtonRegion>
       <List pokemons={pokemons} />
+      <ContainerLoadMore>
+        {load ? (
+          <Loader />
+        ) : (
+          <button
+            className="button_loadMore"
+            onClick={() => {
+              setLoad(true);
+              loadMorePokemons(pokemons);
+            }}
+          >
+            Load More
+          </button>
+        )}
+      </ContainerLoadMore>
     </div>
   );
 };
+
 export async function getServerSideProps({ query }) {
   let slugs;
   if (query == {} || !query?.slug) {
@@ -30,7 +72,7 @@ export async function getServerSideProps({ query }) {
   }
   let regionname = slugs;
   const data = await pokeGen(slugs);
-  const { limit, offset } = data;
+  const { limit, offset, limitgen } = data;
 
   const pokemonList = await fetch(
     `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
@@ -46,9 +88,12 @@ export async function getServerSideProps({ query }) {
   );
   return {
     props: {
-      pokemons: pokemonsData,
+      initialPokemons: pokemonsData,
       region_name: regionname,
-    }, // will be passed to the page component as props
+      limitgen: limitgen,
+      limitn: limit,
+      offset: offset,
+    },
   };
 }
 
