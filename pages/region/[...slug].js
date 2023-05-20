@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import { useState } from "react";
 import { pokeGen } from "../../helper";
-import { List } from "../../components";
+import { List, Loader } from "../../components";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
 import { ButtonRegion, ContainerLoadMore } from "../../styles";
@@ -11,6 +11,7 @@ const Region = ({ initialPokemons, region_name, offset }) => {
   const router = useRouter();
   const [pokemons, setPokemons] = useState(initialPokemons);
   const [limit, setLimit] = useState(offset + 20);
+  const [load, setLoad] = useState(false);
 
   const loadMorePokemons = async (currentPokemons) => {
     const pokemonList = await fetch(
@@ -25,7 +26,7 @@ const Region = ({ initialPokemons, region_name, offset }) => {
         return dataJSON;
       })
     );
-
+    setLoad(false);
     const filteredPokemons = newPokemonsData.filter(
       (pokemon) => !currentPokemons.some((p) => p.id === pokemon.id)
     );
@@ -43,14 +44,19 @@ const Region = ({ initialPokemons, region_name, offset }) => {
       </ButtonRegion>
       <List pokemons={pokemons} />
       <ContainerLoadMore>
-        <button
-          className="button_loadMore"
-          onClick={() => {
-            loadMorePokemons(pokemons);
-          }}
-        >
-          Load More
-        </button>
+        {load ? (
+          <Loader />
+        ) : (
+          <button
+            className="button_loadMore"
+            onClick={() => {
+              setLoad(true);
+              loadMorePokemons(pokemons);
+            }}
+          >
+            Load More
+          </button>
+        )}
       </ContainerLoadMore>
     </div>
   );
