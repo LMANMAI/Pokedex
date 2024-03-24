@@ -5,11 +5,10 @@ import { ButtonContainer, Button, FaArrowLeft, FaArrowRight } from "../styles";
 import { useDispatch } from "react-redux";
 import { setnextPage, setPrevPage, setRegiones } from "../features/pagSlice";
 
-const index = ({ pokemons, regiones, objetoCompleto }) => {
+const index = ({ regiones, objetoCompleto }) => {
   const dispatch = useDispatch();
   //destructuro el objeto que me llega como props
   const router = useRouter();
-
   const obtenerOffsetYLimit = (url) => {
     const regex = /offset=(\d+)&limit=(\d+)/;
     const match = url.match(regex);
@@ -59,7 +58,7 @@ const index = ({ pokemons, regiones, objetoCompleto }) => {
   return (
     <main>
       {/*aca va la lista */}
-      <List pokemons={pokemons} />
+      <List pokemons={objetoCompleto.data} />
       <ButtonContainer>
         {objetoCompleto.previous === null ? null : (
           <Button onClick={handlePrevClick}>
@@ -94,16 +93,19 @@ export async function getServerSideProps({ query }) {
     );
     return {
       props: {
-        pokemons: pokemonsData,
         regiones: pokemonRegionJson.results,
-        objetoCompleto: pokemonsJSON,
+        objetoCompleto: {
+          data: pokemonsData,
+          count: pokemonsJSON.count,
+          next: pokemonsJSON.next,
+          previous: pokemonsJSON.previous,
+        },
       },
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       props: {
-        pokemons: [],
         regiones: [],
         objetoCompleto: {},
       },
