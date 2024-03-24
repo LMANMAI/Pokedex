@@ -43,31 +43,37 @@ const List = ({ pokemons }) => {
     >
       <PokedexContainer>
         {React.Children.toArray(
-          pokemons.map((pokemon) => (
-            <motion.div className="item" variants={item}>
-              <PokemonItem
-                onClick={() => router.push(`/pokemon/${pokemon.id}`)}
-                background={getTypeColor(pokemon.types[0].type.name)}
-              >
-                <PokemonImg
-                  src={pokemon.sprites.other["official-artwork"].front_default}
-                />
-                <PokemonNumber># {pokemon.id}</PokemonNumber>
-                <div>
-                  <PokemonName>{pokemon.name}</PokemonName>
-                  <TypeContainer>
-                    {React.Children.toArray(
-                      pokemon.types.map((type) => (
-                        <PokemonType background={getTypeColor(type.type.name)}>
-                          <p>{type.type.name}</p>
-                        </PokemonType>
-                      ))
-                    )}
-                  </TypeContainer>
-                </div>
-              </PokemonItem>
-            </motion.div>
-          ))
+          pokemons &&
+            pokemons.length > 0 &&
+            pokemons.map((pokemon) => (
+              <motion.div className="item" variants={item}>
+                <PokemonItem
+                  onClick={() => router.push(`/pokemon/${pokemon.id}`)}
+                  background={getTypeColor(pokemon.types[0].type.name)}
+                >
+                  <PokemonImg
+                    src={
+                      pokemon.sprites.other["official-artwork"].front_default
+                    }
+                  />
+                  <PokemonNumber># {pokemon.id}</PokemonNumber>
+                  <div>
+                    <PokemonName>{pokemon.name}</PokemonName>
+                    <TypeContainer>
+                      {React.Children.toArray(
+                        pokemon.types.map((type) => (
+                          <PokemonType
+                            background={getTypeColor(type.type.name)}
+                          >
+                            <p>{type.type.name}</p>
+                          </PokemonType>
+                        ))
+                      )}
+                    </TypeContainer>
+                  </div>
+                </PokemonItem>
+              </motion.div>
+            ))
         )}
       </PokedexContainer>
     </motion.div>

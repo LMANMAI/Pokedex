@@ -1,84 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { List } from "../components";
 import { ButtonContainer, Button, FaArrowLeft, FaArrowRight } from "../styles";
-import { useDispatch } from "react-redux";
-import { setnextPage, setPrevPage, setRegiones } from "../features/pagSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setnextPage,
+  setPrevPage,
+  setRegiones,
+  selectOffset,
+  setOffset,
+} from "../features/pagSlice";
 
-const index = ({ regiones, objetoCompleto }) => {
+const index = () => {
   const dispatch = useDispatch();
+  const [region, setRegion] = useState([]);
+  const [data, setData] = useState({});
   //destructuro el objeto que me llega como props
   const router = useRouter();
-  const obtenerOffsetYLimit = (url) => {
-    const regex = /offset=(\d+)&limit=(\d+)/;
-    const match = url.match(regex);
-    if (match) {
-      return {
-        offset: parseInt(match[1]),
-      };
-    } else {
-      return null;
-    }
-  };
+  const offset = useSelector(selectOffset);
 
-  const handleNextClick = () => {
-    const { offset } = obtenerOffsetYLimit(objetoCompleto.next);
-    dispatch(setnextPage(objetoCompleto.next));
-    router.push({
-      pathname: "/",
-      query: {
-        offset: offset,
-      },
-    });
-  };
-
-  const handlePrevClick = () => {
-    const { offset } = obtenerOffsetYLimit(objetoCompleto.previous);
-    dispatch(setPrevPage(objetoCompleto.previous));
-    router.push({
-      pathname: "/",
-      query: {
-        offset: offset,
-      },
-    });
-  };
-
-  useEffect(() => {
-    dispatch(setnextPage(objetoCompleto.next));
-    if (objetoCompleto.previous !== null) {
-      dispatch(setPrevPage(objetoCompleto.previous));
-    }
-    window.scrollTo(0, 0);
-  }, [objetoCompleto]);
-
-  useEffect(() => {
-    dispatch(setRegiones(regiones));
-  }, []);
-
-  return (
-    <main>
-      {/*aca va la lista */}
-      <List pokemons={objetoCompleto.data} />
-      <ButtonContainer>
-        {objetoCompleto.previous === null ? null : (
-          <Button onClick={handlePrevClick}>
-            <FaArrowLeft />
-          </Button>
-        )}
-
-        <Button onClick={handleNextClick}>
-          <FaArrowRight />
-        </Button>
-      </ButtonContainer>
-    </main>
-  );
-};
-export async function getServerSideProps({ query }) {
-  try {
-    //consulta para las regiones
+  const handleData = async () => {
     const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
     const pokemonRegionJson = await pokemonRegion.json();
-    let offset = query.offset ? query.offset : 0;
+
     //consulta para los pokemons
     let pokemonsList = await fetch(
       `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`
@@ -91,25 +35,56 @@ export async function getServerSideProps({ query }) {
         return dataJSON;
       })
     );
-    return {
-      props: {
-        regiones: pokemonRegionJson.results,
-        objetoCompleto: {
-          data: pokemonsData,
-          count: pokemonsJSON.count,
-          next: pokemonsJSON.next,
-          previous: pokemonsJSON.previous,
-        },
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return {
-      props: {
-        regiones: [],
-        objetoCompleto: {},
-      },
-    };
-  }
-}
+    setData({
+      pokemonsData,
+      count: pokemonsJSON.count,
+      next: pokemonsJSON.next,
+      previous: pokemonsJSON.previous,
+    });
+    setRegion(pokemonRegionJson);
+  };
+
+  const handleNextClick = () => {
+    dispatch(setnextPage(data.next));
+    dispatch(setOffset(offset + 20));
+  };
+
+  const handlePrevClick = () => {
+    dispatch(setPrevPage(data.previous));
+    dispatch(setOffset(offset - 20));
+  };
+
+  useEffect(() => {
+    handleData();
+    dispatch(setnextPage(data.next));
+    if (data.previous !== null) {
+      dispatch(setPrevPage(data.previous));
+    }
+    window.scrollTo(0, 0);
+  }, [data, offset]);
+
+  useEffect(() => {
+    handleData();
+    dispatch(setRegiones(region));
+  }, []);
+
+  return (
+    <main>
+      {/*aca va la lista */}
+      <List pokemons={data ? data.pokemonsData : []} />
+      <ButtonContainer>
+        {data.previous === null ? null : (
+          <Button onClick={handlePrevClick}>
+            <FaArrowLeft />
+          </Button>
+        )}
+
+        <Button onClick={handleNextClick}>
+          <FaArrowRight />
+        </Button>
+      </ButtonContainer>
+    </main>
+  );
+};
+
 export default index;

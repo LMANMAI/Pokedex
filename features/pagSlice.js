@@ -7,7 +7,7 @@ export const pagSlice = createSlice({
     prevUrl: "",
     regiones: [],
     search: "",
-    offset: 20,
+    offset: 0,
   },
   reducers: {
     setnextPage: (state, action) => {
