@@ -21,6 +21,7 @@ const index = ({ pokemons, regiones, objetoCompleto }) => {
       return null;
     }
   };
+
   const handleNextClick = () => {
     const { offset } = obtenerOffsetYLimit(objetoCompleto.next);
     dispatch(setnextPage(objetoCompleto.next));
@@ -74,17 +75,16 @@ const index = ({ pokemons, regiones, objetoCompleto }) => {
   );
 };
 export async function getServerSideProps({ query }) {
-  //consulta para las regiones
   try {
+    //consulta para las regiones
     const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
     const pokemonRegionJson = await pokemonRegion.json();
-
+    let offset = query.offset ? query.offset : 0;
     //consulta para los pokemons
     let pokemonsList = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset=${query.offset}&limit=20`
+      `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`
     );
     const pokemonsJSON = await pokemonsList.json();
-
     const pokemonsData = await Promise.all(
       pokemonsJSON.results.map(async ({ url }) => {
         const data = await fetch(url);
@@ -100,11 +100,12 @@ export async function getServerSideProps({ query }) {
       },
     };
   } catch (error) {
+    console.error("Error fetching data:", error);
     return {
       props: {
         pokemons: [],
         regiones: [],
-        objetoCompleto: [],
+        objetoCompleto: {},
       },
     };
   }

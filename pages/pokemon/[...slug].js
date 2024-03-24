@@ -81,13 +81,7 @@ const PokemonPage = (props) => {
   );
 };
 export async function getServerSideProps({ query }) {
-  let slugs;
-  if (query == {} || !query?.slug) {
-    slugs = "";
-  } else {
-    const _slugs = query.slug;
-    slugs = _slugs.join("_");
-  }
+  let slugs = query.slug ? query.slug.join("_") : "";
 
   const pokemonData = await fetch(`https://pokeapi.co/api/v2/pokemon/${slugs}`);
   const pokemonDataJson = await pokemonData.json();

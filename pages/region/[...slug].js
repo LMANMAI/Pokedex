@@ -66,13 +66,7 @@ const Region = ({ initialPokemons, region_name, offset }) => {
 };
 
 export async function getServerSideProps({ query }) {
-  let slugs;
-  if (query == {} || !query?.slug) {
-    slugs = "";
-  } else {
-    const _slugs = query.slug;
-    slugs = _slugs.join("_");
-  }
+  let slugs = query.slug ? query.slug.join("_") : "";
   let regionname = slugs;
   const data = await pokeGen(slugs);
   const { limit, offset, limitgen } = data;
