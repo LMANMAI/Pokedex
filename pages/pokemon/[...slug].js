@@ -95,7 +95,7 @@ export async function getServerSideProps({ query }) {
   return {
     props: {
       pokemon: pokemonDataJson,
-    }, // will be passed to the page component as props
+    },
   };
 }
 export default PokemonPage;

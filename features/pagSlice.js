@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const pagSlice = createSlice({
   name: "pag",
   initialState: {
-    paginador: 0,
+    paginador: 1,
     nextUrl: "",
     prevUrl: "",
     regiones: [],

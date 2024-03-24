@@ -66,17 +66,14 @@ export const PokemonID = styled.p`
   opacity: 0.5;
 `;
 export const TypesContainer = styled.div`
-  /* position: absolute; */
-  /* top: 50%; */
   display: flex;
-  /* width: 60vw; */
   justify-content: center;
 `;
 export const TypeName = styled.div`
   background-color: ${(props) => props.background};
   width: fit-content;
   padding: 8px;
-  border-radius: 35px;
+  border-radius: 10px;
   margin: 10px 5px;
   color: white;
   text-transform: capitalize;
@@ -87,11 +84,11 @@ export const TopSide = styled.div`
 export const ImageContainer = styled.div`
   width: 100%;
   height: 80%;
-  /* justify-content: center; */
-  /* justify-self: center; */
   align-self: flex-end;
   margin: 0 auto;
-  //border: 1px solid red;
+  display: flex;
+  align-items: center;
+  padding: 10px;
   @media (min-width: 768px) {
     width: 80%;
     align-self: center;
@@ -106,14 +103,15 @@ export const BottomSideContainer = styled.div`
 export const Box = styled.div`
   background-color: white;
   margin-top: 1rem;
-  border-radius: 35px;
+  border-radius: 10px;
   width: 80%;
   height: 60%;
+
   @media (min-width: 768px) {
+    height: fit-content;
     width: 60%;
     align-self: center;
     padding: 1rem;
-    //width: fit-content;
     height: fit-content;
   }
 `;
@@ -153,8 +151,9 @@ export const ButtonRegion = styled.button`
   height: 55px;
   background-color: #5595a5;
   color: white;
-  margin-left: 1.5rem;
+  left: 1.5rem;
   cursor: pointer;
+  top: 10px;
 `;
 
 export const ContainerLoadMore = styled.div`
