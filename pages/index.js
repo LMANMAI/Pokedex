@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { List } from "../components";
 import { ButtonContainer, Button, FaArrowLeft, FaArrowRight } from "../styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +15,6 @@ const index = () => {
   const [region, setRegion] = useState([]);
   const [data, setData] = useState({});
   //destructuro el objeto que me llega como props
-  const router = useRouter();
   const offset = useSelector(selectOffset);
 
   const handleData = async () => {
