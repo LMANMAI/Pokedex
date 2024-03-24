@@ -75,38 +75,29 @@ const index = ({ pokemons, regiones, objetoCompleto }) => {
 };
 export async function getServerSideProps({ query }) {
   //consulta para las regiones
-  try {
-    const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
-    const pokemonRegionJson = await pokemonRegion.json();
 
-    //consulta para los pokemons
-    let pokemonsList = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset=${query.offset}&limit=20`
-    );
-    const pokemonsJSON = await pokemonsList.json();
+  const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
+  const pokemonRegionJson = await pokemonRegion.json();
 
-    const pokemonsData = await Promise.all(
-      pokemonsJSON.results.map(async ({ url }) => {
-        const data = await fetch(url);
-        const dataJSON = await data.json();
-        return dataJSON;
-      })
-    );
-    return {
-      props: {
-        pokemons: pokemonsData,
-        regiones: pokemonRegionJson.results,
-        objetoCompleto: pokemonsJSON,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        pokemons: [],
-        regiones: [],
-        objetoCompleto: [],
-      },
-    };
-  }
+  //consulta para los pokemons
+  let pokemonsList = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/?offset=${query.offset}&limit=20`
+  );
+  const pokemonsJSON = await pokemonsList.json();
+
+  const pokemonsData = await Promise.all(
+    pokemonsJSON.results.map(async ({ url }) => {
+      const data = await fetch(url);
+      const dataJSON = await data.json();
+      return dataJSON;
+    })
+  );
+  return {
+    props: {
+      pokemons: pokemonsData,
+      regiones: pokemonRegionJson.results,
+      objetoCompleto: pokemonsJSON,
+    },
+  };
 }
 export default index;
