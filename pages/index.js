@@ -12,15 +12,11 @@ import {
 
 const index = () => {
   const dispatch = useDispatch();
-  const [region, setRegion] = useState([]);
   const [data, setData] = useState({});
   //destructuro el objeto que me llega como props
   const offset = useSelector(selectOffset);
 
   const handleData = async () => {
-    const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
-    const pokemonRegionJson = await pokemonRegion.json();
-
     //consulta para los pokemons
     let pokemonsList = await fetch(
       `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`
@@ -39,9 +35,12 @@ const index = () => {
       next: pokemonsJSON.next,
       previous: pokemonsJSON.previous,
     });
-    setRegion(pokemonRegionJson);
   };
-
+  const handleDataRegion = async () => {
+    const pokemonRegion = await fetch("https://pokeapi.co/api/v2/region/");
+    const pokemonRegionJson = await pokemonRegion.json();
+    dispatch(setRegiones(pokemonRegionJson.results));
+  };
   const handleNextClick = () => {
     dispatch(setnextPage(data.next));
     dispatch(setOffset(offset + 20));
@@ -63,7 +62,7 @@ const index = () => {
 
   useEffect(() => {
     handleData();
-    dispatch(setRegiones(region));
+    handleDataRegion();
   }, []);
 
   return (
