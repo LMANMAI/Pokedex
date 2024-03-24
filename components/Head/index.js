@@ -3,8 +3,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
 import {
-  RegionContainer,
-  Region,
   Container,
   Pokeball,
   PokedexTittle,
@@ -29,10 +27,9 @@ const Header = () => {
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
   };
-  const handleRegionClick = (region) => {
+  const handleRegionChange = (region) => {
     let offsetLimit = 0;
-
-    switch (region.name) {
+    switch (region) {
       case "kanto":
         offsetLimit = 151;
         break;
@@ -70,7 +67,7 @@ const Header = () => {
     dispatch(setOffsetLimit(offsetLimit));
 
     router.push({
-      pathname: `/region/${region.name}`,
+      pathname: `/region/${region}`,
     });
   };
 
@@ -79,6 +76,7 @@ const Header = () => {
     router.pathname === "/pokemon/[...slug]"
   )
     return null;
+
   return (
     <Container>
       <Head>
@@ -117,13 +115,29 @@ const Header = () => {
         ) : null}
       </PokedexTittle>
 
-      <RegionContainer>
+      <select
+        style={{
+          padding: "8px",
+          fontSize: "16px",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          backgroundColor: "#fff",
+          color: "#333",
+          width: "200px",
+          outline: "none",
+        }}
+        onChange={(e) => handleRegionChange(e.target.value)}
+      >
         {regiones?.map((region) => (
-          <Region key={region.name} onClick={() => handleRegionClick(region)}>
+          <option
+            key={region.name}
+            value={region.name}
+            style={{ textTransform: "capitalize" }}
+          >
             {region.name}
-          </Region>
+          </option>
         ))}
-      </RegionContainer>
+      </select>
     </Container>
   );
 };

@@ -2,8 +2,7 @@ import styled from "@emotion/styled";
 
 export const PokedexContainer = styled.div`
   width: 90vw;
-  margin: 10px auto;
-  padding-top: 35px;
+  margin: 0px auto;
   @media (min-width: 768px) {
     & {
       display: grid;
@@ -24,29 +23,14 @@ export const PokemonItem = styled.div`
   transition: all 300ms;
   overflow: hidden;
   position: relative;
-  /* .pkball {
-    position: absolute;
-    z-index: 0;
-    width: 60%;
-    filter: opacity(0.3);
-    top: -45px;
-    left: -110px;
-  }*/
-  :hover {
+
+  &:hover {
     transform: scale(1.03);
   }
   @media (min-width: 768px) {
     & {
       height: 150px;
     }
-    /* .pkball {
-      position: absolute;
-      z-index: 0;
-      width: 70%;
-      opacity: 0.3;
-      top: -10px;
-      left: -70px;
-    } */
   }
 `;
 export const PokemonImg = styled.img`
@@ -87,9 +71,9 @@ export const PokemonName = styled.h4`
 export const PokemonType = styled.div`
   margin: 3px;
   padding: 5px;
-  border-radius: 35px;
+  border-radius: 10px;
+  font-size: 13px;
   background-color: ${(props) => props.background};
-  //opacity: 0.5;
   border: 1px solid #f4f4f4;
   color: white;
   p {

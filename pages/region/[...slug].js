@@ -42,22 +42,25 @@ const Region = ({ initialPokemons, region_name, offset }) => {
       <ButtonRegion onClick={() => router.back()}>
         <FaArrowLeft />
       </ButtonRegion>
-      <List pokemons={pokemons} />
-      <ContainerLoadMore>
-        {load ? (
-          <Loader />
-        ) : (
-          <button
-            className="button_loadMore"
-            onClick={() => {
-              setLoad(true);
-              loadMorePokemons(pokemons);
-            }}
-          >
-            Load More
-          </button>
-        )}
-      </ContainerLoadMore>
+
+      <div style={{ marginTop: "55px" }}>
+        <List pokemons={pokemons} />
+        <ContainerLoadMore>
+          {load ? (
+            <Loader />
+          ) : (
+            <button
+              className="button_loadMore"
+              onClick={() => {
+                setLoad(true);
+                loadMorePokemons(pokemons);
+              }}
+            >
+              Load More
+            </button>
+          )}
+        </ContainerLoadMore>
+      </div>
     </div>
   );
 };

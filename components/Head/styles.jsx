@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
-export const Container = styled.div`
+export const Container = styled.nav`
   width: 100vw;
-  height: 70px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-direction: row;
   font-family: Helvetica, sans-serif;
-  background-color: #fff;
-  margin-bottom: 1.5rem;
+  background-color: #f9fafc;
+  padding: 10px;
   z-index: -2;
   .back_btn {
     margin-right: 20px;
